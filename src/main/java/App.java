@@ -4,19 +4,57 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class App {
 
-    // method to take input from command line and confirm that it's an integer.
-    // allow new input if the wrong type is added.
-    static int checkIsInt() {
+    private static int MAX_GUESS_VALUE = 50;
+    private static int MIN_GUESS_VALUE = 1;
+    private static int NUMBER_OF_GUESSES = 4;
+    private static int NUMBER_OF_ROUNDS = 3;
+
+    // Get input from command line, check its in correct format, return it as int.
+    private static int getGuess() {
         Scanner s = new Scanner(System.in);
         System.out.println("Please enter you guess:");
         String guessString = s.nextLine();
         int guessInt = 0;
-        try {
+        if (checkIfInteger(guessString)&&checkIfIsInRange(guessString)){
             guessInt = Integer.parseInt(guessString);
+        }else{
+            getGuess();
+        }
+        return guessInt;
+    }
+
+    private static boolean checkIfInteger(String guessString){
+        boolean isInteger = false;
+        try {
+            Integer.parseInt(guessString);
+            isInteger = true;
         } catch (Exception e) {
             System.out.println("You did not enter an integer. Please try again");
         }
-        return guessInt;
+        return isInteger;
+    }
+
+    private static boolean checkIfIsInRange(String guessString){
+        boolean isInRange = false;
+        int guessInt = Integer.parseInt(guessString);
+        if (guessInt>=MIN_GUESS_VALUE && guessInt<=MAX_GUESS_VALUE){
+            isInRange = true;
+        } else {
+        System.out.println("You did not enter a number between " + MIN_GUESS_VALUE + " and " + MAX_GUESS_VALUE + ". Please try again");
+        }
+        return isInRange;
+    }
+
+    private static boolean checkGuess(int guess, int randomNumber){
+        if (guess == randomNumber) {
+            return true;
+        } else if (guess > randomNumber) {
+            System.out.println("Incorrect! My number is lower than " + guess + ".");
+            return false;
+        } else {
+            System.out.println("Incorrect! My number is higher than " + guess + ".");
+            return false;
+        }
     }
 
     public static void main() {
@@ -42,20 +80,17 @@ public class App {
                 System.out.println("Number has been generated.");
                 // 4 guesses
                 for (int i = 0; i < 4; i++) {
-                    currentGuess = checkIsInt();
-                    if (currentGuess == randomNum) {
-                        winRound = true;
+                    currentGuess = getGuess();
+                    if (checkGuess(currentGuess,randomNum)){
+                        winRound=true;
                         break;
-                    } else if (currentGuess > randomNum && i < 3) {
-                        System.out.println("Incorrect! My number is lower than " + currentGuess + ".");
-                    } else if (currentGuess < randomNum && i < 3) {
-                        System.out.println("Incorrect! My number is higher than " + currentGuess + ".");
                     }
+
                 }
 
                 //Print win or lose message at the end of the round.
                 if (winRound) {
-                    System.out.println("You win this round!");
+                    System.out.println("Correct! My number was " + randomNum + ". You win this round!");
                     winGameCount++;
                 } else {
                     System.out.println("Incorrect! You've run out of guesses. You lose this round!");
