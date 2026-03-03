@@ -27,10 +27,13 @@ public class App {
         boolean winGame = false;
 
         for (int j = 0; j < 3; j++) {
-            if (winGameCount >= 2) {
+            if (winGameCount == 2) {
                 winGame = true;
                 break;
-            } else {
+            } else if(j==2 && winGameCount<2) {
+                break;
+            }
+            else {
                 // reset variables
                 currentGuess = 0;
                 winRound = false;
