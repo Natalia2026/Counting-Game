@@ -3,14 +3,15 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class App {
+    GameConfig config = new GameConfig(4, 3,1, 50);
 
-    private static int MAX_GUESS_VALUE = 50;
-    private static int MIN_GUESS_VALUE = 1;
-    private static int NUMBER_OF_GUESSES = 4;
-    private static int NUMBER_OF_ROUNDS = 3;
+    private  int MAX_GUESS_VALUE = config.getMax();
+    private  int MIN_GUESS_VALUE = config.getMin();
+    private  int MAX_NUMBER_OF_GUESSES = config.getMaxGuessNumber();
+    private  int MAX_NUMBER_OF_ROUNDS = config.getMaxRoundNumber();
 
     // Get input from command line, check its in correct format, return it as int.
-    private static int getGuess() {
+    private int getGuess() {
         Scanner s = new Scanner(System.in);
         System.out.println("Please enter you guess:");
         String guessString = s.nextLine();
@@ -23,7 +24,7 @@ public class App {
         return guessInt;
     }
 
-    private static boolean checkIfInteger(String guessString){
+    private boolean checkIfInteger(String guessString){
         boolean isInteger = false;
         try {
             Integer.parseInt(guessString);
@@ -34,7 +35,7 @@ public class App {
         return isInteger;
     }
 
-    private static boolean checkIfIsInRange(String guessString){
+    private boolean checkIfIsInRange(String guessString){
         boolean isInRange = false;
         int guessInt = Integer.parseInt(guessString);
         if (guessInt>=MIN_GUESS_VALUE && guessInt<=MAX_GUESS_VALUE){
@@ -45,7 +46,7 @@ public class App {
         return isInRange;
     }
 
-    private static boolean checkGuess(int guess, int randomNumber){
+    private boolean checkGuess(int guess, int randomNumber){
         if (guess == randomNumber) {
             return true;
         } else if (guess > randomNumber) {
@@ -57,7 +58,7 @@ public class App {
         }
     }
 
-    public static void main() {
+    public void main() {
         //Initialise variables
         int currentGuess = 0;
         boolean winRound = false;
@@ -76,7 +77,7 @@ public class App {
                 currentGuess = 0;
                 winRound = false;
                 // generate number
-                int randomNum = ThreadLocalRandom.current().nextInt(1, 51);
+                int randomNum = ThreadLocalRandom.current().nextInt(MIN_GUESS_VALUE, MAX_GUESS_VALUE+1);
                 System.out.println("Number has been generated.");
                 // 4 guesses
                 for (int i = 0; i < 4; i++) {
